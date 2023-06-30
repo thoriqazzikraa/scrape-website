@@ -30,7 +30,7 @@
 `scrape.filmApikS(query)`
 
 - filmApikDl
-`scrape.filmApikDl(url)
+`scrape.filmApikDl(url)`
 
 - otakuDesuSearch
 `scrape.otakuDesuSearch(query)`
