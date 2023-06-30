@@ -1,6 +1,6 @@
 {
   "name": "scrape-website",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Website Scraping",
   "main": "index.js",
   "scripts": {
