@@ -1,8 +1,8 @@
 # Install
-`npm i scrape-website`
+`npm i scrape-websitee`
 
 # Usage
-`const scrape = require("scrape-website")`
+`const scrape = require("scrape-websitee")`
 
 # Endpoints
 - tiktokdl
