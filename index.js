@@ -9,7 +9,7 @@ const baseSSS = "https://instasupersave.com/";
 const formData = require("form-data");
 const bodyForm = new formData();
 
-const { num } = require("../function");
+const { num } = require("./function");
 
 const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
