@@ -29,15 +29,22 @@ async function cekResi(kurir, resi) {
 
 async function tiktokdl(url) {
   try {
-    const { data } = await axios(`https://downloader.bot/api/tiktok/info`, {
-      method: "post",
-      data: { url: url },
-      headers: {
-        accept: "*/*",
-        "content-type": "application/json",
-      },
+    const getUdid = async () => {
+      const { data } = await axios.get(`https://tikdown.org`);
+      let $ = cheerio.load(data);
+      return $("meta:nth-child(2)").attr("content");
+    };
+    const { data } = await axios.get(
+      `https://tikdown.org/getAjax?url=${url}&_token=${getUdid}`
+    );
+    let $ = cheerio.load(data.html);
+    let result = { status: true, media: [] };
+    $(
+      "div.download-result > .download-links > div.button-primary-gradient"
+    ).each(function () {
+      result.media.push($(this).find("a").attr("href"));
     });
-    return data;
+    return result;
   } catch {
     const result = {
       status: false,
@@ -132,13 +139,15 @@ async function igStalk(username) {
       var pronoun = addSlash;
     }
     const res = data.result.user;
+    const followers = num.convertNum(res.follower_count);
+    const followings = num.convertNum(res.following_count);
     const result = {
       status: true,
       creator: "Thoriq Azzikra",
       username: res.username,
       fullName: res.full_name,
-      followers: res.follower_count,
-      following: res.following_count,
+      followers: followers,
+      following: following,
       pronouns: pronoun,
       verified: res.is_verified,
       private: res.is_private,
@@ -148,6 +157,7 @@ async function igStalk(username) {
       urlAcc: `https://instagram.com/${username}`,
       profilePic: res.hd_profile_pic_url_info.url,
     };
+    console.log(result);
     return result;
   } catch (err) {
     return (result = {
