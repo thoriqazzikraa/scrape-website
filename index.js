@@ -139,15 +139,15 @@ async function igStalk(username) {
       var pronoun = addSlash;
     }
     const res = data.result.user;
-    const followers = num.convertNum(res.follower_count);
-    const followings = num.convertNum(res.following_count);
+    const followers = await num.convertNum(res.follower_count);
+    const followings = await num.convertNum(res.following_count);
     const result = {
       status: true,
       creator: "Thoriq Azzikra",
       username: res.username,
       fullName: res.full_name,
       followers: followers,
-      following: following,
+      following: followings,
       pronouns: pronoun,
       verified: res.is_verified,
       private: res.is_private,
@@ -157,15 +157,15 @@ async function igStalk(username) {
       urlAcc: `https://instagram.com/${username}`,
       profilePic: res.hd_profile_pic_url_info.url,
     };
-    console.log(result);
     return result;
   } catch (err) {
-    return (result = {
+    result = {
       status: false,
       creator: "Thoriq Azzikra",
-      message: "Tidak dapat menemukan akun",
-    });
+      message: String(err),
+    };
     console.log(result);
+    return result;
   }
 }
 
