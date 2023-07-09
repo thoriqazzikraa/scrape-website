@@ -16,16 +16,29 @@ const pickRandom = async (ext) => {
 };
 
 async function twitterdl(url) {
-  const link = url.split("status/")[1].split("?")[0];
-  const { data } = await axios.get(
-    `https://api.twitterpicker.com/tweet/mediav2?id=${link}`
-  );
-  return data.media.videos[0].variants.find(
-    (vid) =>
-      vid.content_type === "video/mp4" &&
-      vid.height <= 3000 &&
-      vid.width <= 3000
-  );
+  const { data } = await axios.get(`https://twitsave.com/info?url=${url}`);
+  let $ = cheerio.load(data);
+  let result = [];
+  $("div.origin-top-right > ul > li").each(function () {
+    result.push({
+      width: $(this)
+        .find("a > div > div > div")
+        .text()
+        .split("Resolution: ")[1]
+        .split("x")[0],
+      height: $(this)
+        .find("a > div > div > div")
+        .text()
+        .split("Resolution: ")[1]
+        .split("x")[1],
+      url: $(this).find("a").attr("href"),
+    });
+  });
+  resolt = result.sort(function (a, b) {
+    return a.height - b.height;
+  });
+  arrayResult = resolt[resolt.length - 1];
+  return resolt.filter((video) => video.width === arrayResult.width);
 }
 
 async function cekResi(kurir, resi) {
@@ -67,7 +80,7 @@ async function tiktokdl(url) {
     return result;
   }
 }
-
+tiktokdl("https://vt.tiktok.com/ZSLAEGtrM/");
 async function igdl(url) {
   try {
     const resp = await axios.post(
@@ -152,15 +165,13 @@ async function igStalk(username) {
       var pronoun = addSlash;
     }
     const res = data.result.user;
-    const followers = await num.convertNum(res.follower_count);
-    const followings = await num.convertNum(res.following_count);
     const result = {
       status: true,
       creator: "Thoriq Azzikra",
       username: res.username,
       fullName: res.full_name,
-      followers: followers,
-      following: followings,
+      followers: res.follower_count,
+      following: res.following_count,
       pronouns: pronoun,
       verified: res.is_verified,
       private: res.is_private,
@@ -172,13 +183,12 @@ async function igStalk(username) {
     };
     return result;
   } catch (err) {
-    result = {
+    return (result = {
       status: false,
       creator: "Thoriq Azzikra",
-      message: String(err),
-    };
+      message: "Tidak dapat menemukan akun",
+    });
     console.log(result);
-    return result;
   }
 }
 
