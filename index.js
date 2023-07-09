@@ -15,6 +15,19 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function twitterdl(url) {
+  const link = url.split("status/")[1].split("?")[0];
+  const { data } = await axios.get(
+    `https://api.twitterpicker.com/tweet/mediav2?id=${link}`
+  );
+  return data.media.videos[0].variants.find(
+    (vid) =>
+      vid.content_type === "video/mp4" &&
+      vid.height <= 3000 &&
+      vid.width <= 3000
+  );
+}
+
 async function cekResi(kurir, resi) {
   let { data } = await axios(`https://pluginongkoskirim.com/front/resi`, {
     method: "post",
@@ -312,6 +325,7 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  twitterdl,
   cekResi,
   tiktokdl,
   similarBand,
