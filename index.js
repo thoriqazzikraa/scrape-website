@@ -87,7 +87,7 @@ async function tiktokdl(url) {
     return result;
   }
 }
-tiktokdl("https://vt.tiktok.com/ZSLAEGtrM/");
+
 async function igdl(url) {
   try {
     const resp = await axios.post(
