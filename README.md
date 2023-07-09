@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- twitterdl
+`scrape.twitterdl(url)`
+
 - tiktokdl
 `scrape.tiktokdl(url)`
 
