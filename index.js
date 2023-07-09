@@ -34,6 +34,13 @@ async function twitterdl(url) {
       url: $(this).find("a").attr("href"),
     });
   });
+  if (result.length === 0 || result.length === null) {
+    const result = {
+      status: false,
+      message: "Tidak dapat menemukan video",
+    };
+    return result;
+  }
   resolt = result.sort(function (a, b) {
     return a.height - b.height;
   });
