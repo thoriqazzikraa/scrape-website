@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- fbdl
+`scrape.fbdl(url)`
+
 - twitterdl
 `scrape.twitterdl(url)`
 
