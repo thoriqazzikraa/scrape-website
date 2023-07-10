@@ -23,7 +23,7 @@ async function fbdl(url) {
       headers: {
         accept: "*/*",
         "content-type": "application/x-www-form-urlencoded",
-        "x-requested-with": "XMLHttpRequet",
+        "x-requested-with": "XMLHttpRequest",
       },
     });
     const $ = cheerio.load(data.data);
