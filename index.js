@@ -45,7 +45,7 @@ async function fbdl(url) {
       });
     });
     if (result.length === 0) {
-      const resolt = {
+      const result = {
         status: false,
         message: "Couldn't fetch data of url",
       };
