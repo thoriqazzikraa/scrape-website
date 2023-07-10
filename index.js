@@ -16,32 +16,50 @@ const pickRandom = async (ext) => {
 };
 
 async function fbdl(url) {
-  const { data } = await axios(`https://fdownload.app/api/ajaxSearch`, {
-    method: "post",
-    data: { p: "home", q: url, lang: "en" },
-    headers: {
-      accept: "*/*",
-      "content-type": "application/x-www-form-urlencoded",
-      "x-requested-with": "XMLHttpRequet",
-    },
-  });
-  const $ = cheerio.load(data.data);
-  let result = [];
-  $(
-    "#fbdownloader > div.tab-wrap > div:nth-child(5) > table > tbody > tr"
-  ).each(function () {
-    if ($(this).find("td:nth-child(2)").text() === "Yes") {
-      var link = $(this).find("td:nth-child(3) > button").attr("data-videourl");
-    } else {
-      var link = $(this).find("td:nth-child(3) > a").attr("href");
-    }
-    result.push({
-      quality: $(this).find("td.video-quality").text().split("p")[0],
-      render: $(this).find("td:nth-child(2)").text(),
-      url: link,
+  try {
+    const { data } = await axios(`https://fdownload.app/api/ajaxSearch`, {
+      method: "post",
+      data: { p: "home", q: url, lang: "en" },
+      headers: {
+        accept: "*/*",
+        "content-type": "application/x-www-form-urlencoded",
+        "x-requested-with": "XMLHttpRequet",
+      },
     });
-  });
-  return result.filter((filter) => filter.render === "No");
+    const $ = cheerio.load(data.data);
+    let result = [];
+    $(
+      "#fbdownloader > div.tab-wrap > div:nth-child(5) > table > tbody > tr"
+    ).each(function () {
+      if ($(this).find("td:nth-child(2)").text() === "Yes") {
+        var link = $(this)
+          .find("td:nth-child(3) > button")
+          .attr("data-videourl");
+      } else {
+        var link = $(this).find("td:nth-child(3) > a").attr("href");
+      }
+      result.push({
+        quality: $(this).find("td.video-quality").text().split("p")[0],
+        render: $(this).find("td:nth-child(2)").text(),
+        url: link,
+      });
+    });
+    if (result.length === 0) {
+      const resolt = {
+        status: false,
+        message: "Couldn't fetch data of url",
+      };
+      return result;
+    }
+    return result.filter((filter) => filter.render === "No");
+  } catch (err) {
+    const result = {
+      status: false,
+      message: `Couldn't fetch data of url\n\n${String(err)}`,
+    };
+    console.log(result);
+    return result;
+  }
 }
 
 async function twitterdl(url) {
