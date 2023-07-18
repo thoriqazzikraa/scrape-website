@@ -6,8 +6,6 @@ const baseFilmApik = "https://filmapik21.live/";
 const baseOtakudesu = "https://otakudesu.lol/";
 const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru";
 const baseSSS = "https://instasupersave.com/";
-const formData = require("form-data");
-const bodyForm = new formData();
 
 const { num } = require("./function");
 
