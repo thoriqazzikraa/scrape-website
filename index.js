@@ -274,6 +274,38 @@ const listCerpen = async () => {
   return rndm;
 };
 
+async function getCerpenHorror() {
+  try {
+    const getUrl = async () => {
+      const randomNumber = Math.floor(Math.random() * 127);
+      const { data } = await axios.get(
+        `https://cerpenmu.com/category/cerpen-horor-hantu/page/${randomNumber}`
+      );
+      const $ = cheerio.load(data);
+      let result = [];
+      $("div#wrap > #content > article > article").each(function () {
+        result.push($(this).find("h2 > a").attr("href"));
+      });
+      return pickRandom(result);
+    };
+    const url = await getUrl();
+    const { data } = await axios.get(url);
+    let $ = cheerio.load(data);
+    const result = {
+      status: true,
+      title: $("#content > article > h1").text(),
+      creator: $("#content > article > a:nth-child(2)").text(),
+      category: $("#content > article > a:nth-child(4)").text(),
+      story: $("#content > article > p").text().split("Cerpen Karangan")[0],
+    };
+    return result;
+  } catch (err) {
+    const result = {
+      status: false,
+      message: String(err),
+    };
+  }
+}
 async function getCerpen() {
   try {
     const getUrlCerpen = await listCerpen();
@@ -387,6 +419,7 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  getCerpenHorror,
   fbdl,
   twitterdl,
   cekResi,

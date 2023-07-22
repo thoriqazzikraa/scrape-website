@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- getCerpenHorror
+`scrape.getCerpenHorror()`
+
 - fbdl
 `scrape.fbdl(url)`
 
