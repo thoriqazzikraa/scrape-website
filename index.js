@@ -13,6 +13,17 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function threads(url) {
+  try {
+    const { data } = await axios.get(
+      `https://api.threadsphotodownloader.com/v2/media?url=${url}`
+    );
+    return data;
+  } catch (err) {
+    return String(err);
+  }
+}
+
 async function fbdl(url) {
   try {
     const { data } = await axios(`https://fdownload.app/api/ajaxSearch`, {
@@ -419,6 +430,7 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  threads,
   getCerpenHorror,
   fbdl,
   twitterdl,

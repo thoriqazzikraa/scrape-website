@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- Threads
+`scrape.threads(url)`
+
 - getCerpenHorror
 `scrape.getCerpenHorror()`
 
