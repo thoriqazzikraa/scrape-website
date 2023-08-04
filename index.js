@@ -13,6 +13,52 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function twitterdl2(url) {
+  try {
+    const result = { status: true, type: "", media: [] };
+    const { data } = await axios(`https://savetwitter.net/api/ajaxSearch`, {
+      method: "post",
+      data: { q: url, lang: "en" },
+      headers: {
+        accept: "*/*",
+        "user-agent": "PostmanRuntime/7.32.2",
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    });
+    let $ = cheerio.load(data.data);
+    if ($("div.tw-video").length === 0) {
+      $("div.video-data > div > ul > li").each(function () {
+        result.type = "image";
+        result.media.push(
+          $(this).find("div > div:nth-child(2) > a").attr("href")
+        );
+      });
+    } else {
+      $("div.tw-video").each(function () {
+        result.type = "video";
+        result.media.push({
+          quality: $(this)
+            .find(".tw-right > div > p:nth-child(1) > a")
+            .text()
+            .split("(")[1]
+            .split(")")[0],
+          url: $(this)
+            .find(".tw-right > div > p:nth-child(1) > a")
+            .attr("href"),
+        });
+      });
+    }
+    return result;
+  } catch (err) {
+    const result = {
+      status: false,
+      message: "Media not found!" + String(err),
+    };
+    console.log(result);
+    return result;
+  }
+}
+
 async function threads(url) {
   try {
     const { data } = await axios.get(
@@ -95,6 +141,7 @@ async function twitterdl(url) {
       status: false,
       message: "Tidak dapat menemukan video",
     };
+    console.log(result);
     return result;
   }
   resolt = result.sort(function (a, b) {
@@ -163,7 +210,7 @@ async function igdl2(url) {
         },
       }
     );
-    const arry = data.links.video.map((video) => result.media.push(video.url));
+    await data.links.video.map((video) => result.media.push(video.url));
     return result;
   } catch (err) {
     const result = {
@@ -460,6 +507,7 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  twitterdl2,
   igdl2,
   threads,
   getCerpenHorror,

@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- twitterdl2
+`scrape.twitterdl2(url)`
+
 - igdl2
 `scrape.igdl2(url)`
 
