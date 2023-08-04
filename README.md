@@ -5,6 +5,9 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+- igdl2
+`scrape.igdl2(url)`
+
 - Threads
 `scrape.threads(url)`
 
