@@ -7,7 +7,6 @@ const baseOtakudesu = "https://otakudesu.lol/";
 const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru";
 const baseSSS = "https://instasupersave.com/";
 const { fromBuffer, fileTypeStream } = require("file-type-cjs-fix");
-const got = require("got");
 const fs = require("fs");
 
 const { num, checkUrl } = require("./function");
@@ -38,17 +37,23 @@ async function textToImage(text) {
 }
 
 async function uploadFile(buffer) {
-  const { ext, mime } = await fromBuffer(buffer);
-  const filePath = `temp/${Date.now()}.${ext}`;
-  fs.writeFileSync(filePath, file);
-  const fileData = fs.readFileSync(filePath);
-  const form = new URLSearchParams();
-  form.append("files[]", fileData, `${Date.now()}.${ext}`);
-  const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
-    method: "post",
-    data: form,
+  return new Promise(async (resolve, reject) => {
+    const { ext, mime } = await fromBuffer(buffer);
+    const filePath = `temp/${Date.now()}.${ext}`;
+    fs.writeFileSync(filePath, file, async (err) => {
+      if (err) reject(err);
+      const fileData = fs.readFileSync(filePath);
+      const form = new URLSearchParams();
+      form.append("files[]", fileData, `${Date.now()}.${ext}`);
+      const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
+        method: "post",
+        data: form,
+      });
+      resolve(data)
+        .then(() => fs.unlinkSync(filePath))
+        .catch((err) => reject(err));
+    });
   });
-  return data;
 }
 
 async function enhanceImg(url, scale) {
