@@ -6,12 +6,49 @@ const baseFilmApik = "https://filmapik21.live/";
 const baseOtakudesu = "https://otakudesu.lol/";
 const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru";
 const baseSSS = "https://instasupersave.com/";
+const { fromBuffer, fileTypeStream } = require("file-type-cjs-fix");
+const got = require("got");
+const fs = require("fs");
 
-const { num } = require("./function");
+const { num, checkUrl } = require("./function");
 
 const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
+
+async function uploadFile(buffer) {
+  const { ext, mime } = await fromBuffer(buffer);
+  const filePath = `temp/${Date.now()}.${ext}`;
+  fs.writeFileSync(filePath, file);
+  const fileData = fs.readFileSync(filePath);
+  const form = new URLSearchParams();
+  form.append("files[]", fileData, `${Date.now()}.${ext}`);
+  const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
+    method: "post",
+    data: form,
+  });
+  return data;
+}
+
+async function enhanceImg(buffer) {
+  const media = await uploadFile(image);
+  const { data } = await axios(`https://toolsapi.spyne.ai/api/forward`, {
+    method: "post",
+    data: {
+      image_url: media.files[0].url,
+      scale: 4,
+      save_params: {
+        extension: ".png",
+        quality: 95,
+      },
+    },
+    headers: {
+      "content-type": "application/json",
+      accept: "*/*",
+    },
+  });
+  return data;
+}
 
 async function twitterdl2(url) {
   try {
@@ -507,6 +544,8 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  uploadFile,
+  enhanceImg,
   twitterdl2,
   igdl2,
   threads,
