@@ -5,7 +5,7 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
-` textToImage
+- textToImage
 `scrape.textToImage(text)`
 
 - uploadFile
