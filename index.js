@@ -16,6 +16,27 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function textToImage(text) {
+  try {
+    const { data } = await axios.get(
+      "https://tti.photoleapapp.com/api/v1/generate?prompt=" + text
+    );
+    const enhanceImages = await enhanceImg(data.result_url, 2);
+    const result = {
+      status: true,
+      url: enhanceImages.url,
+    };
+    return result;
+  } catch (err) {
+    const result = {
+      status: false,
+      message: String(err),
+    };
+    console.log(result);
+    return result;
+  }
+}
+
 async function uploadFile(buffer) {
   const { ext, mime } = await fromBuffer(buffer);
   const filePath = `temp/${Date.now()}.${ext}`;
@@ -30,13 +51,13 @@ async function uploadFile(buffer) {
   return data;
 }
 
-async function enhanceImg(buffer) {
-  const media = await uploadFile(image);
+async function enhanceImg(url, scale) {
+  const scaleNumber = scale ? scale : 2;
   const { data } = await axios(`https://toolsapi.spyne.ai/api/forward`, {
     method: "post",
     data: {
-      image_url: media.files[0].url,
-      scale: 4,
+      image_url: url,
+      scale: scaleNumber,
       save_params: {
         extension: ".png",
         quality: 95,
@@ -544,6 +565,7 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
+  textToImage,
   uploadFile,
   enhanceImg,
   twitterdl2,

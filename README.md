@@ -5,11 +5,14 @@
 `const scrape = require("scrape-websitee")`
 
 # Endpoints
+` textToImage
+`scrape.textToImage(text)`
+
 - uploadFile
 `scrape.uploadFile(buffer)`
 
 - enhanceImg
-`scrape.enhanceImg(buffer)`
+`scrape.enhanceImg(url)`
 
 - twitterdl2
 `scrape.twitterdl2(url)`
