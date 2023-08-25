@@ -37,23 +37,18 @@ async function textToImage(text) {
 }
 
 async function uploadFile(buffer) {
-  return new Promise(async (resolve, reject) => {
-    const { ext, mime } = await fromBuffer(buffer);
-    const filePath = `temp/${Date.now()}.${ext}`;
-    fs.writeFileSync(filePath, buffer, async (err) => {
-      if (err) reject(err);
-      const fileData = fs.readFileSync(filePath);
-      const form = new URLSearchParams();
-      form.append("files[]", fileData, `${Date.now()}.${ext}`);
-      const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
-        method: "post",
-        data: form,
-      });
-      resolve(data)
-        .then(() => fs.unlinkSync(filePath))
-        .catch((err) => reject(err));
-    });
+  const { ext, mime } = await fromBuffer(buffer);
+  const filePath = `temp/${Date.now()}.${ext}`;
+  await fs.writeFileSync(filePath, buffer);
+  const fileData = fs.readFileSync(filePath);
+  const form = new URLSearchParams();
+  form.append("files[]", fileData, `${Date.now()}.${ext}`);
+  const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
+    method: "post",
+    data: form,
   });
+  return data;
+  await fs.unlinkSync(filePath);
 }
 
 async function enhanceImg(url, scale) {
