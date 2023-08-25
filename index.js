@@ -8,7 +8,7 @@ const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru";
 const baseSSS = "https://instasupersave.com/";
 const { fromBuffer, fileTypeStream } = require("file-type-cjs-fix");
 const fs = require("fs");
-
+const formData = require("form-data");
 const { num, checkUrl } = require("./function");
 
 const pickRandom = async (ext) => {
@@ -41,7 +41,7 @@ async function uploadFile(buffer) {
   const filePath = `temp/${Date.now()}.${ext}`;
   await fs.writeFileSync(filePath, buffer);
   const fileData = fs.readFileSync(filePath);
-  const form = new URLSearchParams();
+  const form = new formData();
   form.append("files[]", fileData, `${Date.now()}.${ext}`);
   const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
     method: "post",
