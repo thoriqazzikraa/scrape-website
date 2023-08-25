@@ -40,7 +40,7 @@ async function uploadFile(buffer) {
   return new Promise(async (resolve, reject) => {
     const { ext, mime } = await fromBuffer(buffer);
     const filePath = `temp/${Date.now()}.${ext}`;
-    fs.writeFileSync(filePath, file, async (err) => {
+    fs.writeFileSync(filePath, buffer, async (err) => {
       if (err) reject(err);
       const fileData = fs.readFileSync(filePath);
       const form = new URLSearchParams();
