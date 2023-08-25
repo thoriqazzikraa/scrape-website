@@ -1,6 +1,6 @@
 {
   "name": "scrape-websitee",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Website Scraping",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
-    "file-type-cjs-fix": "^1.1.1"
+    "file-type-cjs-fix": "^1.1.1",
+    "fs": "^0.0.1-security"
   }
 }
