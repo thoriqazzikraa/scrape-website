@@ -41,14 +41,20 @@ async function uploadFile(buffer) {
   const filePath = `temp/${Date.now()}.${ext}`;
   await fs.writeFileSync(filePath, buffer);
   const fileData = fs.readFileSync(filePath);
-  const form = new formData();
-  form.append("files[]", fileData, `${Date.now()}.${ext}`);
-  const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
-    method: "post",
-    data: form,
-  });
-  return data;
-  await fs.unlinkSync(filePath);
+  try {
+    const form = new formData();
+    form.append("files[]", fileData, `${Date.now()}.${ext}`);
+    const { data } = await axios(`https://pomf2.lain.la/upload.php`, {
+      method: "post",
+      data: form,
+    });
+    return data;
+  } catch (err) {
+    console.log(err);
+    return String(err);
+  } finally {
+    fs.unlinkSync(filePath);
+  }
 }
 
 async function enhanceImg(url, scale) {
