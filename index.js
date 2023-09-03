@@ -1,4 +1,5 @@
 const axios = require("axios");
+const version = require("./package.json").version;
 const cheerio = require("cheerio");
 const indoDrama = "https://id.indodrama.net/";
 const base21 = "https://terbit21.art/";
@@ -571,23 +572,35 @@ async function filmApikDl(url) {
 }
 
 module.exports = {
-  textToImage,
-  uploadFile,
-  enhanceImg,
-  twitterdl2,
-  igdl2,
-  threads,
-  getCerpenHorror,
-  fbdl,
-  twitterdl,
-  cekResi,
-  tiktokdl,
-  similarBand,
-  pindl,
-  igStalk,
-  getCerpen,
-  filmApikDl,
-  filmApikS,
-  otakuDesuSearch,
-  igdl,
+  creator: "Thoriq Azzikra",
+  version: version,
+  tools: {
+    uploadFile,
+    enhanceImg,
+    cekResi,
+  },
+  downloader: {
+    twitterdl2,
+    igdl2,
+    threads,
+    fbdl,
+    twitterdl,
+    tiktokdl,
+    pindl,
+    igdl,
+  },
+  search: {
+    similarBand,
+    igStalk,
+    filmApikS,
+    filmApikDl,
+    otakuDesuSearch,
+  },
+  random: {
+    getCerpen,
+    getCerpenHorror,
+  },
+  ai: {
+    textToImage,
+  },
 };

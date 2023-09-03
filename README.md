@@ -6,59 +6,59 @@
 
 # Endpoints
 - textToImage
-`scrape.textToImage(text)`
+`scrape.ai.textToImage(text)`
 
 - uploadFile
-`scrape.uploadFile(buffer)`
+`scrape.tools.uploadFile(buffer)`
 
 - enhanceImg
-`scrape.enhanceImg(url)`
+`scrape.tools.enhanceImg(url)`
 
 - twitterdl2
-`scrape.twitterdl2(url)`
+`scrape.downloader.twitterdl2(url)`
 
 - igdl2
-`scrape.igdl2(url)`
+`scrape.downloader.igdl2(url)`
 
 - Threads
-`scrape.threads(url)`
+`scrape.downloader.threads(url)`
 
 - getCerpenHorror
-`scrape.getCerpenHorror()`
+`scrape.random.getCerpenHorror()`
 
 - fbdl
-`scrape.fbdl(url)`
+`scrape.downloader.fbdl(url)`
 
 - twitterdl
-`scrape.twitterdl(url)`
+`scrape.downloader.twitterdl(url)`
 
 - tiktokdl
-`scrape.tiktokdl(url)`
+`scrape.downloader.tiktokdl(url)`
 
 - igdl
-`scrape.igdl(url)`
+`scrape.downloader.igdl(url)`
 
 - cekResi
-`scrape.cekResi(kurir, resi)`
+`scrape.tools.cekResi(kurir, resi)`
 
 - similarBand
-`scrape.similarBand(query)`
+`scrape.search.similarBand(query)`
 
 - pindl
-`scrape.pindl(url)`
+`scrape.downloader.pindl(url)`
 
 - igStalk
-`scrape.igStalk(username)`
+`scrape.search.igStalk(username)`
 
 - getCerpen
-`scrape.getCerpen()`
+`scrape.random.getCerpen()`
 
 - filmApikS
-`scrape.filmApikS(query)`
+`scrape.search.filmApikS(query)`
 
 - filmApikDl
-`scrape.filmApikDl(url)`
+`scrape.search.filmApikDl(url)`
 
 - otakuDesuSearch
-`scrape.otakuDesuSearch(query)`
+`scrape.search.otakuDesuSearch(query)`
 
