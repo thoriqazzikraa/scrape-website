@@ -2,63 +2,92 @@
 `npm i scrape-websitee`
 
 # Usage
-`const scrape = require("scrape-websitee")`
+```js
+const scrape = require("scrape-websitee")
+```
 
 # Endpoints
+- ttsModel
+```js
+scrape.tools.ttsModel()
+```
+- tiktokTts
+```js
+scrape.tools.tiktokTts(text) // Audio result will be return as base64
+```
 - textToImage
-`scrape.ai.textToImage(text)`
-
+```js
+scrape.ai.textToImage(text)
+```
 - uploadFile
-`scrape.tools.uploadFile(buffer)`
-
+```js
+scrape.tools.uploadFile(buffer)
+```
 - enhanceImg
-`scrape.tools.enhanceImg(url)`
-
+```js
+scrape.tools.enhanceImg(url)
+```
 - twitterdl2
-`scrape.downloader.twitterdl2(url)`
-
+```js
+scrape.downloader.twitterdl2(url)
+```
 - igdl2
-`scrape.downloader.igdl2(url)`
-
+```js
+scrape.downloader.igdl2(url)
+```
 - Threads
-`scrape.downloader.threads(url)`
-
+```js
+scrape.downloader.threads(url)
+```
 - getCerpenHorror
-`scrape.random.getCerpenHorror()`
-
+```js
+scrape.random.getCerpenHorror()
+```
 - fbdl
-`scrape.downloader.fbdl(url)`
-
+```js
+scrape.downloader.fbdl(url)
+```
 - twitterdl
-`scrape.downloader.twitterdl(url)`
-
+```js
+scrape.downloader.twitterdl(url)
+```
 - tiktokdl
-`scrape.downloader.tiktokdl(url)`
-
+```js
+scrape.downloader.tiktokdl(url)
+```
 - igdl
-`scrape.downloader.igdl(url)`
-
+```js
+scrape.downloader.igdl(url)
+```
 - cekResi
-`scrape.tools.cekResi(kurir, resi)`
-
+```js
+scrape.tools.cekResi(kurir, resi)
+```
 - similarBand
-`scrape.search.similarBand(query)`
-
+```js
+scrape.search.similarBand(query)
+```
 - pindl
-`scrape.downloader.pindl(url)`
-
+```js
+scrape.downloader.pindl(url)
+```
 - igStalk
-`scrape.search.igStalk(username)`
-
+```js
+scrape.search.igStalk(username)
+```
 - getCerpen
-`scrape.random.getCerpen()`
-
+```js
+scrape.random.getCerpen()
+```
 - filmApikS
-`scrape.search.filmApikS(query)`
-
+```js
+scrape.search.filmApikS(query)
+```
 - filmApikDl
-`scrape.search.filmApikDl(url)`
-
+```js
+scrape.search.filmApikDl(url)
+```
 - otakuDesuSearch
-`scrape.search.otakuDesuSearch(query)`
-
+```js
+scrape.search.otakuDesuSearch(query)
+```
