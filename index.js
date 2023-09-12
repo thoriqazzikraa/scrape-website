@@ -16,6 +16,61 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function lyrics(query) {
+  try {
+    const search = async () => {
+      const { data } = await axios.get(
+        "https://search.azlyrics.com/search.php?q=" +
+          query +
+          "&x=e9a1e866a967a73ef3f5fab168d365419b4a7b180449e393958bd041c3ec5d1f"
+      );
+      let $ = cheerio.load(data);
+      let url = $(
+        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a"
+      ).attr("href");
+      let artis = $(
+        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a > b"
+      ).text();
+      let title = $(
+        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a > span"
+      )
+        .text()
+        .replace(/"/g, " ");
+      const result = {
+        title: `${artis} - ${title}`,
+        url: url,
+      };
+      return result;
+    };
+    const { title, url } = await search(query);
+    const { data } = await axios.get(url);
+    let $ = cheerio.load(data);
+    if (
+      $("div.row > div:nth-child(2) > div:nth-child(8)").text().trim() === ""
+    ) {
+      var lyric = $("div.row > div:nth-child(2) > div:nth-child(10)")
+        .text()
+        .trim();
+    } else {
+      var lyric = $("div.row > div:nth-child(2) > div:nth-child(8)")
+        .text()
+        .trim();
+    }
+    const result = {
+      status: true,
+      lyric: `${title}\n\n${lyric}`,
+    };
+    return result;
+  } catch (err) {
+    const result = {
+      error: true,
+      message: `Cannot find the lyrics`,
+    };
+    console.log(result);
+    return result;
+  }
+}
+
 function ttsModel() {
   const model = {
     source: `You can find model on this web https://tiktokvoicegenerator.com/`,
@@ -685,6 +740,7 @@ module.exports = {
     igdl,
   },
   search: {
+    lyrics,
     similarBand,
     igStalk,
     filmApikS,
