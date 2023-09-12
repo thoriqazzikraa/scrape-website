@@ -63,7 +63,7 @@ async function lyrics(query) {
     return result;
   } catch (err) {
     const result = {
-      error: true,
+      status: false,
       message: `Cannot find the lyrics`,
     };
     console.log(result);
