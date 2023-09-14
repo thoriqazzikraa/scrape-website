@@ -449,22 +449,7 @@ async function igdl(url) {
     let result = { status: true, data: [] };
     const $ = cheerio.load(resp.data.data);
     $(".download-box > li > .download-items").each(function () {
-      $(this)
-        .find(".photo-option > select > option")
-        .each(function () {
-          let resolution = $(this).text();
-          let url = $(this).attr("value");
-          if (/1080/gi.test(resolution)) result.data.push(url);
-        });
-      $(this)
-        .find("div:nth-child(2)")
-        .each(function () {
-          let url2 = $(this).find("a").attr("href");
-          if (!url2) return;
-          if (!/\.webp/gi.test(url2)) {
-            result.data.push(url2);
-          }
-        });
+      result.data.push($(this).find(".download-items__btn > a").attr("href"));
     });
     return result;
   } catch {
