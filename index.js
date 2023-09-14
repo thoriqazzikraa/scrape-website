@@ -16,6 +16,42 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function similarSongs(songs) {
+  try {
+    const getFirstSong = async () => {
+      const { data } = await axios.get(
+        `https://songslikex.com/?song=${songs}&_data=routes/_index`
+      );
+      return data.list[0];
+    };
+    const getData = await getFirstSong(songs);
+    const url = `https://songslikex.com${getData.url}&_data=routes%2Fsongs-like.%24id.%24title.%24artists`;
+    let { data } = await axios.get(url);
+    const list = data.songs.slice(0, 10);
+    const result = {
+      status: true,
+      original: {
+        artists: data.original.artists,
+        title: data.original.name,
+        id: data.original.id,
+        length: data.original.length,
+        previewUrl: data.original.previewUrl,
+        thumbnail: data.original.trackImage,
+      },
+      listId: data.listId,
+      list,
+    };
+    return result;
+  } catch (err) {
+    console.log(err);
+    const res = {
+      status: false,
+      message: "Unknown error occurred",
+    };
+    return result;
+  }
+}
+
 async function findSongs(text) {
   try {
     const expand = async () => {
@@ -772,6 +808,7 @@ module.exports = {
     igdl,
   },
   search: {
+    similarSongs,
     findSongs,
     lyrics,
     similarBand,

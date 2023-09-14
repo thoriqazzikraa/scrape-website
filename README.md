@@ -27,6 +27,7 @@ const scrape = require("scrape-websitee")
     igdl, // (url)
   },
   search: {
+    similarSongs, // (query)
     findSongs, // (query)
     lyrics, // (query)
     similarBand, // (query)
