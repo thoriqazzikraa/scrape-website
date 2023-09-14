@@ -16,6 +16,53 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function findSongs(text) {
+  try {
+    const expand = async () => {
+      const { data } = await axios.get(
+        "https://songsear.ch/q/" + encodeURIComponent(text)
+      );
+      let $ = cheerio.load(data);
+      let result = {
+        title:
+          $("div.results > div:nth-child(1) > .head > h3 > b").text() +
+          " - " +
+          $("div.results > div:nth-child(1) > .head > h2 > a").text(),
+        album: $("div.results > div:nth-child(1) > .head > p").text(),
+        number: $("div.results > div:nth-child(1) > .head > a")
+          .attr("href")
+          .split("/")[4],
+        thumb: $("div.results > div:nth-child(1) > .head > a > img").attr(
+          "src"
+        ),
+      };
+      return result;
+    };
+    const { title, album, thumb, number } = await expand(text);
+    const { data } = await axios.get(
+      `https://songsear.ch/api/song/${number}?text_only=true`
+    );
+    const lyric = data.song.text_html
+      .replace(/<br\/>/g, "\n")
+      .replace(/&#x27;/g, "'");
+    const result = {
+      status: true,
+      title: title,
+      album: album,
+      thumb: thumb,
+      lyrics: lyric,
+    };
+    return result;
+  } catch (err) {
+    console.log(err);
+    const result = {
+      status: false,
+      error: "Unknown error occurred",
+    };
+    return result;
+  }
+}
+
 async function lyrics(query) {
   try {
     const search = async () => {
@@ -725,6 +772,7 @@ module.exports = {
     igdl,
   },
   search: {
+    findSongs,
     lyrics,
     similarBand,
     igStalk,
