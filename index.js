@@ -16,6 +16,52 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function truthOrDare(language) {
+  const lang = language ? language : "id";
+  try {
+    const dareFunc = async () => {
+      const { data } = await axios(`https://psycatgames.com/api/tod-v2/`, {
+        method: "post",
+        data: {
+          id: "truth-or-dare",
+          language: lang,
+          category: "mixed",
+          type: "dare",
+        },
+        headers: {
+          Referer: "https://psycatgames.com",
+        },
+      });
+      const randomResult = Math.floor(Math.random() * data.results.length);
+      return data.results[randomResult];
+    };
+    const dare = await dareFunc(lang);
+    const { data } = await axios(`https://psycatgames.com/api/tod-v2/`, {
+      method: "post",
+      data: {
+        id: "truth-or-dare",
+        language: lang,
+        category: "mixed",
+        type: "truth",
+      },
+      headers: {
+        Referer: "https://psycatgames.com",
+      },
+    });
+    const randomResult = Math.floor(Math.random() * data.results.length);
+    const result = {
+      status: true,
+      dare: dare,
+      truth: data.results[randomResult],
+    };
+    return result;
+  } catch (err) {
+    console.log(err);
+    const res = { status: false, message: "Unknown error occurred." };
+    return res;
+  }
+}
+
 async function similarSongs(songs) {
   try {
     const getFirstSong = async () => {
@@ -828,6 +874,7 @@ module.exports = {
     otakuDesuSearch,
   },
   random: {
+    truthOrDare,
     getCerpen,
     getCerpenHorror,
   },
