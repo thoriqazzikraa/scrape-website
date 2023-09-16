@@ -127,7 +127,7 @@ async function similarSongs(songs) {
   });
   try {
     const dataa = await axios.get(
-      `https://www.chosic.com/api/tools/recommendations?seed_tracks=${getData.tracks.items[0].id}&limit=5`,
+      `https://www.chosic.com/api/tools/recommendations?seed_tracks=${getData.tracks.items[0].id}&limit=30`,
       {
         headers: {
           Referer: "https://www.chosic.com",
