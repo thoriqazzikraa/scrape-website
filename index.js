@@ -16,6 +16,35 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
 };
 
+async function igStory(username) {
+  try {
+    const { pkId } = await igStalk(username);
+    const { data } = await axios.get(
+      `https://instasupersave.com/api/ig/stories/${pkId}`
+    );
+    let result = { status: true, media: [] };
+    data.result.map((check) => {
+      if (check.has_audio === true) {
+        var url = check.video_versions[0].url;
+      } else {
+        var res = check.image_versions2.candidates.find(
+          (media) => media.height <= 3000
+        );
+        var url = res.url;
+      }
+      result.media.push(url);
+    });
+    return result;
+  } catch (err) {
+    console.log(err);
+    const result = {
+      status: false,
+      message: "Unknown error occurred.",
+    };
+    return result;
+  }
+}
+
 async function truthOrDare(language) {
   const lang = language ? language : "id";
   try {
@@ -657,6 +686,7 @@ async function igStalk(username) {
       externalUrl: res.external_url,
       urlAcc: `https://instagram.com/${username}`,
       profilePic: res.hd_profile_pic_url_info.url,
+      pkId: res.pk_id,
     };
     return result;
   } catch (err) {
@@ -854,6 +884,7 @@ module.exports = {
     ttsModel,
   },
   downloader: {
+    igStory,
     twitterdl2,
     igdl2,
     threads,

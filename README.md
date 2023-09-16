@@ -17,6 +17,7 @@ const scrape = require("scrape-websitee")
     ttsModel, 
   },
   downloader: {
+    igStory, // (username)
     twitterdl2, // (url)
     igdl2, // (url)
     threads, // (url)
