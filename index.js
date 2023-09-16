@@ -97,48 +97,86 @@ async function truthOrDare(language) {
 }
 
 async function similarSongs(songs) {
-  try {
-    const getFirstSong = async () => {
-      const { data } = await axios.get(
-        `https://songslikex.com/?song=${songs}&_data=routes/_index`
-      );
-      return data.list[0];
+  let result = {};
+  const getFirstSong = async () => {
+    const { data } = await axios.get(
+      `https://www.chosic.com/api/tools/search?q=${songs}&type=track&limit=1`,
+      {
+        headers: {
+          Referer: "https://www.chosic.com",
+        },
+      }
+    );
+    return data;
+  };
+  const getData = await getFirstSong(songs);
+  if (getData.tracks.items.length === 0) {
+    result = {
+      status: false,
+      message: "No songs found!",
     };
-    const getData = await getFirstSong(songs);
-    const url = `https://songslikex.com${getData.url}&_data=routes%2Fsongs-like.%24id.%24title.%24artists`;
-    let { data } = await axios.get(url);
-    const list = data.songs.slice(0, 10).map((res) => {
-      const result = {
-        artists: res.artists,
+    console.log(result);
+    return result;
+  }
+  const url =
+    `https://www.chosic.com/api/tools/tracks/` + getData.tracks.items[0].id;
+  let { data } = await axios.get(url, {
+    headers: {
+      Referer: "https://www.chosic.com",
+    },
+  });
+  try {
+    const dataa = await axios.get(
+      `https://www.chosic.com/api/tools/recommendations?seed_tracks=${getData.tracks.items[0].id}&limit=5`,
+      {
+        headers: {
+          Referer: "https://www.chosic.com",
+        },
+      }
+    );
+    const similarSongs = dataa.data.tracks.map((res) => {
+      const resultt = {
+        album: {
+          type: res.album.album_type,
+          name: res.album.name,
+          releaseDate: res.album.release_date,
+        },
         title: res.name,
-        id: res.id,
-        duration: num.convertMs(res.length),
-        previewUrl: res.previewUrl,
-        thumbnail: res.trackImage,
+        duration: num.convertMs(res.duration_ms),
+        artists: res.artists.map((art) => art.name).join(", "),
+        popularity: res.popularity,
+        thumbnail: res.album.image_large,
+        previewUrl: res.preview_url,
       };
-      return result;
+      return resultt;
     });
-    const result = {
+    result = {
       status: true,
       original: {
-        artists: data.original.artists,
-        title: data.original.name,
-        id: data.original.id,
-        duration: num.convertMs(data.original.length),
-        previewUrl: data.original.previewUrl,
-        thumbnail: data.original.trackImage,
+        album: {
+          type: data.album.album_type,
+          name: data.album.name,
+          releaseDate: data.album.release_date,
+        },
+        title: data.name,
+        duration: num.convertMs(data.duration_ms),
+        artists: data.artists.map((art) => art.name).join(", "),
+        popularity: data.popularity,
+        thumbnail: data.album.image_large,
+        previewUrl: data.preview_url,
       },
-      listId: data.listId,
-      list,
+      similarSongs,
     };
-    return result;
+    return result
   } catch (err) {
-    console.log(err);
-    const res = {
+    result = {
       status: false,
-      message: "Unknown error occurred",
+      statusCode: err.response.data.data.status,
+      code: err.response.data.code,
+      message: err.response.data.message,
     };
-    return result;
+    console.log(result);
+    return result
   }
 }
 
