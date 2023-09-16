@@ -34,6 +34,11 @@ async function igStory(username) {
       }
       result.media.push(url);
     });
+    if (result.media.length === 0) {
+      result.status = false;
+      result.media = null;
+      result.message = `The account you're looking for doesn't have any stories or maybe the account is private.`;
+    }
     return result;
   } catch (err) {
     console.log(err);
