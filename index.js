@@ -167,7 +167,7 @@ async function similarSongs(songs) {
       },
       similarSongs,
     };
-    return result
+    return result;
   } catch (err) {
     result = {
       status: false,
@@ -176,7 +176,7 @@ async function similarSongs(songs) {
       message: err.response.data.message,
     };
     console.log(result);
-    return result
+    return result;
   }
 }
 
@@ -228,55 +228,51 @@ async function findSongs(text) {
 }
 
 async function lyrics(query) {
+  let result = {};
   try {
-    const search = async () => {
+    const lyricsFunc = async () => {
       const { data } = await axios.get(
-        "https://search.azlyrics.com/search.php?q=" +
-          query +
-          "&x=e9a1e866a967a73ef3f5fab168d365419b4a7b180449e393958bd041c3ec5d1f"
+        `https://api.genius.com/search?q=` + query,
+        {
+          headers: {
+            Accept: "application/json",
+            Host: "api.genius.com",
+            "User-Agent": "PostmanRuntime/7.32.2",
+            Authorization:
+              "Bearer INJmdB4aW8JSDNQlkQmqlODP1KcRCH0-WdS6HfNtCnUPL3ReN-W5tUE9UFGJGsLP",
+          },
+        }
       );
-      let $ = cheerio.load(data);
-      let url = $(
-        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a"
-      ).attr("href");
-      let artis = $(
-        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a > b"
-      ).text();
-      let title = $(
-        "div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td > a > span"
-      )
-        .text()
-        .replace(/"/g, " ");
-      const result = {
-        title: `${artis} - ${title}`,
-        url: url,
-      };
-      return result;
+      return data.response.hits[0];
     };
-    const { title, url } = await search(query);
-    const { data } = await axios.get(url);
+    const dataLyrics = await lyricsFunc(query);
+    result.status = true;
+    result.title = dataLyrics.result.title;
+    result.artists = dataLyrics.result.artist_names;
+    result.releaseDate = dataLyrics.result.release_date_for_display;
+    result.thumbnail = dataLyrics.result.header_image_url;
+    result.url = dataLyrics.result.url;
+    const { data } = await axios.get(result.url);
     let $ = cheerio.load(data);
-    if (
-      $("div.row > div:nth-child(2) > div:nth-child(8)").text().trim() === ""
-    ) {
-      var lyric = $("div.row > div:nth-child(2) > div:nth-child(10)")
-        .text()
-        .trim();
-    } else {
-      var lyric = $("div.row > div:nth-child(2) > div:nth-child(8)")
-        .text()
-        .trim();
+    let lyrics = $('div[class="lyrics"]').text().trim();
+    if (!lyrics) {
+      lyrics = "";
+      $('div[class^="Lyrics__Container"]').each((i, elem) => {
+        if ($(elem).text().length !== 0) {
+          let snippet = $(elem)
+            .html()
+            .replace(/<br>/g, "\n")
+            .replace(/<(?!\s*br\s*\/?)[^>]+>/gi, "");
+          lyrics += $("<textarea/>").html(snippet).text().trim() + "\n\n";
+        }
+      });
     }
-    const result = {
-      status: true,
-      lyric: `${title}\n\n${lyric}`,
-    };
+    if (!lyrics) return null;
+    result.lyrics = lyrics.trim();
     return result;
   } catch (err) {
-    const result = {
-      status: false,
-      message: `Cannot find the lyrics`,
-    };
+    result.status = false;
+    result.message = "Lyrics not found!";
     console.log(result);
     return result;
   }
