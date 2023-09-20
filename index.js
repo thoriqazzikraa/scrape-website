@@ -11,6 +11,7 @@ const { fromBuffer, fileTypeStream } = require("file-type-cjs-fix");
 const fs = require("fs");
 const formData = require("form-data");
 const { num, checkUrl } = require("./function");
+const randomAnime = require("./anime");
 
 const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)];
@@ -19,45 +20,55 @@ const pickRandom = async (ext) => {
 async function spotify(url) {
   try {
     const getValue = async () => {
-      const data = await axios.get("https://spotifymate.com/")
-      const $ = cheerio.load(data.data)
-      const name = $("#get_video > input[type=hidden]:nth-child(4)").attr("name")
-      const val = $("#get_video > input[type=hidden]:nth-child(4)").val()
-      const cookie = data.headers['set-cookie'][0].split(";")[0]
+      const data = await axios.get("https://spotifymate.com/");
+      const $ = cheerio.load(data.data);
+      const name = $("#get_video > input[type=hidden]:nth-child(4)").attr(
+        "name"
+      );
+      const val = $("#get_video > input[type=hidden]:nth-child(4)").val();
+      const cookie = data.headers["set-cookie"][0].split(";")[0];
       const result = {
         cookie: cookie,
         name: name,
-        value: val
-      }
-      return result
-    }
-    const dataValue = await getValue()
-    const bodyForm = new formData()
-    bodyForm.append("url", url)
-    bodyForm.append(dataValue.name, dataValue.value)
+        value: val,
+      };
+      return result;
+    };
+    const dataValue = await getValue();
+    const bodyForm = new formData();
+    bodyForm.append("url", url);
+    bodyForm.append(dataValue.name, dataValue.value);
     const { data } = await axios("https://spotifymate.com/action", {
       method: "POST",
       data: bodyForm,
       headers: {
-        "cookie": dataValue.cookie
-      }
-    })
-    const $ = cheerio.load(data)
+        cookie: dataValue.cookie,
+      },
+    });
+    const $ = cheerio.load(data);
     const result = {
       status: true,
-      title: $("div.row > div > div:nth-child(1) > div:nth-child(2) > div > h3 > div").text(),
-      artists: $("div.row > div > div:nth-child(1) > div:nth-child(2) > p").text(),
-      image: $("div.row > div > div:nth-child(1) > div:nth-child(1) > img").attr("src"),
-      url: $("div.row > div > #download-block > div:nth-child(1) > a").attr("href")
-    }
-    return result
+      title: $(
+        "div.row > div > div:nth-child(1) > div:nth-child(2) > div > h3 > div"
+      ).text(),
+      artists: $(
+        "div.row > div > div:nth-child(1) > div:nth-child(2) > p"
+      ).text(),
+      image: $(
+        "div.row > div > div:nth-child(1) > div:nth-child(1) > img"
+      ).attr("src"),
+      url: $("div.row > div > #download-block > div:nth-child(1) > a").attr(
+        "href"
+      ),
+    };
+    return result;
   } catch (err) {
     const result = {
       status: false,
-      message: "Unknown error occurred.\n\n" + String(err)
-    }
-    console.log(result)
-    return err
+      message: "Unknown error occurred.\n\n" + String(err),
+    };
+    console.log(result);
+    return err;
   }
 }
 
@@ -990,6 +1001,7 @@ module.exports = {
     otakuDesuSearch,
   },
   random: {
+    anime: randomAnime,
     truthOrDare,
     getCerpen,
     getCerpenHorror,

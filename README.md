@@ -17,6 +17,7 @@ const scrape = require("scrape-websitee")
     ttsModel, 
   },
   downloader: {
+    spotify, // (url)
     igStory, // (username)
     twitterdl2, // (url)
     igdl2, // (url)
@@ -38,6 +39,11 @@ const scrape = require("scrape-websitee")
     otakuDesuSearch, // (query)
   },
   random: {
+    anime: {
+     neko,
+     waifu,
+     shinobu
+    },
     truthOrDare, // (language) default: "id", or you can find support languages in here https://psycatgames.com/app/truth-or-dare/
     getCerpen,
     getCerpenHorror,
