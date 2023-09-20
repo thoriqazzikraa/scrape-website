@@ -18,57 +18,57 @@ const pickRandom = async (ext) => {
 };
 
 async function spotify(url) {
-  try {
-    const getValue = async () => {
-      const data = await axios.get("https://spotifymate.com/");
-      const $ = cheerio.load(data.data);
-      const name = $("#get_video > input[type=hidden]:nth-child(4)").attr(
-        "name"
+  if (!checkUrl.isUrl(url)) throw new Error("Please input Url");
+  if (url.includes("spotify.link")) {
+    const getOriginalUrl = async () => {
+      const { data } = await axios.get(
+        `https://api.allorigins.win/get?url=${url}`
       );
-      const val = $("#get_video > input[type=hidden]:nth-child(4)").val();
-      const cookie = data.headers["set-cookie"][0].split(";")[0];
-      const result = {
-        cookie: cookie,
-        name: name,
-        value: val,
-      };
-      return result;
+      const $ = cheerio.load(data.contents);
+      return $(".secondary-action").attr("href");
     };
-    const dataValue = await getValue();
-    const bodyForm = new formData();
-    bodyForm.append("url", url);
-    bodyForm.append(dataValue.name, dataValue.value);
-    const { data } = await axios("https://spotifymate.com/action", {
-      method: "POST",
-      data: bodyForm,
-      headers: {
-        cookie: dataValue.cookie,
-      },
-    });
-    const $ = cheerio.load(data);
-    const result = {
-      status: true,
-      title: $(
-        "div.row > div > div:nth-child(1) > div:nth-child(2) > div > h3 > div"
-      ).text(),
-      artists: $(
-        "div.row > div > div:nth-child(1) > div:nth-child(2) > p"
-      ).text(),
-      image: $(
-        "div.row > div > div:nth-child(1) > div:nth-child(1) > img"
-      ).attr("src"),
-      url: $("div.row > div > #download-block > div:nth-child(1) > a").attr(
-        "href"
-      ),
-    };
-    return result;
-  } catch (err) {
+    const originalUrl = await getOriginalUrl(url);
+    const track = await axios.get(
+      `https://api.spotifydown.com/metadata/track/${
+        originalUrl.split("track/")[1].split("?")[0]
+      }`,
+      {
+        headers: {
+          Origin: "https://spotifydown.com",
+          Referer: "https://spotifydown.com/",
+        },
+      }
+    );
+    const { data } = await axios.get(
+      `https://api.spotifydown.com/download/${track.data.id}`,
+      {
+        headers: {
+          Origin: "https://spotifydown.com",
+          Referer: "https://spotifydown.com/",
+        },
+      }
+    );
+    return data;
+  } else if (url.includes("open.spotify.com")) {
+    const { data } = await axios.get(
+      `https://api.spotifydown.com/download/${
+        url.split("track/")[1].split("?")[0]
+      }`,
+      {
+        headers: {
+          Origin: "https://spotifydown.com",
+          Referer: "https://spotifydown.com/",
+        },
+      }
+    );
+    return data;
+  } else {
     const result = {
       status: false,
-      message: "Unknown error occurred.\n\n" + String(err),
+      message: "Please input valid spotify url",
     };
     console.log(result);
-    return err;
+    return result;
   }
 }
 
