@@ -1,5 +1,7 @@
 # Install
-`npm i scrape-websitee`
+```
+npm i scrape-websitee
+```
 
 # Usage
 ```js
@@ -17,6 +19,7 @@ const scrape = require("scrape-websitee")
     ttsModel, 
   },
   downloader: {
+    soundcloud, // (url)
     spotify, // (url)
     igStory, // (username)
     twitterdl2, // (url)
