@@ -1,6 +1,6 @@
 # Install
-```
-npm i scrape-websitee
+```sh
+> npm i scrape-websitee
 ```
 
 # Usage

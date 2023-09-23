@@ -1,6 +1,6 @@
 {
   "name": "scrape-websitee",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "description": "Website Scraping",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "file-type-cjs-fix": "^1.1.1",
     "form-data": "^4.0.0",
     "fs": "^0.0.1-security",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "2.6.6",
     "prettier": "^3.0.3"
   }
 }
