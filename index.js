@@ -18,6 +18,38 @@ const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)]
 }
 
+async function tiktokHD(url) {
+  let result = {}
+  const bodyForm = new formData()
+  bodyForm.append("q", url)
+  bodyForm.append("lang", "id")
+  try {
+    const { data } = await axios(`https://savetik.co/api/ajaxSearch`, {
+      method: "post",
+      data: bodyForm,
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.32.2"
+      }
+    })
+    const $ = cheerio.load(data.data)
+    $("div.video-data > div > .tik-right > div > p").filter(function () {
+      if ($(this).find("a").text().includes("HD")) {
+        result.status = true
+        result.title = $("div.video-data > div > .tik-left > div > .content > div > h3").text()
+        result.quality = $(this).find("a").text().split("MP4 ")[1]
+        result.url = $(this).find("a").attr("href")
+      }
+    })
+    return result
+  } catch (err) {
+    result.status = false
+    result.message = "Video not found!"
+    console.log(result)
+    return result
+  }
+}
+
 async function soundcloud(url) {
   if (!checkUrl.isUrl(url)) throw new Error("Please input url")
   if (!url.includes("soundcloud.com")) throw new Error("Invalid soundcloud url")
@@ -889,6 +921,7 @@ module.exports = {
     ttsModel
   },
   downloader: {
+    tiktokHD,
     soundcloud,
     spotify,
     igStory,
