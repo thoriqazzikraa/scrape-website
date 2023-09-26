@@ -17,8 +17,7 @@ const randomAnime = require("./anime")
 const pickRandom = async (ext) => {
   return ext[Math.floor(Math.random() * ext.length)]
 }
-
-async function tiktokHD(url) {
+async function tiktokdl2(url) {
   let result = {}
   const bodyForm = new formData()
   bodyForm.append("q", url)
@@ -33,14 +32,21 @@ async function tiktokHD(url) {
       }
     })
     const $ = cheerio.load(data.data)
-    $("div.video-data > div > .tik-right > div > p").filter(function () {
-      if ($(this).find("a").text().includes("HD")) {
-        result.status = true
-        result.title = $("div.video-data > div > .tik-left > div > .content > div > h3").text()
-        result.quality = $(this).find("a").text().split("MP4 ")[1]
-        result.url = $(this).find("a").attr("href")
-      }
-    })
+    result.status = true
+    result.caption = $("div.video-data > div > .tik-left > div > .content > div > h3").text()
+    ;(result.server1 = {
+      quality: "MEDIUM",
+      url: $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
+    }),
+      (result.server2 = {
+        quality: "MEDIUM",
+        url: $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+      }),
+      (result.serverHD = {
+        quality: $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").text().split("MP4 ")[1],
+        url: $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
+      }),
+      (result.audio = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href"))
     return result
   } catch (err) {
     result.status = false
@@ -921,7 +927,7 @@ module.exports = {
     ttsModel
   },
   downloader: {
-    tiktokHD,
+    tiktokdl2,
     soundcloud,
     spotify,
     igStory,

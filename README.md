@@ -19,7 +19,7 @@ const scrape = require("scrape-websitee")
     ttsModel, 
   },
   downloader: {
-    tiktokHD, // (url)
+    tiktokdl2, // (url)
     soundcloud, // (url)
     spotify, // (url)
     igStory, // (username)
