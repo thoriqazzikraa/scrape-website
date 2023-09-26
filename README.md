@@ -48,10 +48,7 @@ const scrape = require("scrape-websitee")
      waifu,
      shinobu
     },
-    truthOrDare, // (language) default: "id", or you can find support languages in here https://psycatgames.com/app/truth-or-dare/
-    getCerpen,
-    getCerpenHorror,
-  },
+    
   ai: {
     textToImage, // (query)
   },
