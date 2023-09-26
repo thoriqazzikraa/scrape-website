@@ -2,6 +2,7 @@ const axios = require("axios")
 const fetch = require("node-fetch")
 const formData = require("form-data")
 const { isUrl } = require("../function/isUrl.js")
+const cheerio = require("cheerio")
 
 async function twitterdl2(url) {
   try {
@@ -211,7 +212,6 @@ async function pindl(url) {
     return result
   }
 }
-
 async function tiktokdl2(url) {
   let result = {}
   const bodyForm = new formData()
