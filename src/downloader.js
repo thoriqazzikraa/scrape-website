@@ -3,6 +3,7 @@ const fetch = require("node-fetch")
 const formData = require("form-data")
 const { isUrl } = require("../function/isUrl.js")
 const cheerio = require("cheerio")
+const { igStory } = require("./search.js")
 
 async function twitterdl2(url) {
   try {
