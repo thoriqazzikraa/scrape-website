@@ -1,5 +1,5 @@
 const axios = require("axios")
-const { enhanceimg } = require("../src/tools.js")
+const { enhanceImg } = require("./tools.js")
 
 async function textToImage(text) {
   try {
