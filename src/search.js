@@ -4,7 +4,6 @@ const baseFilmApik = "https://filmapik21.live/"
 const cheerio = require("cheerio")
 const baseSSS = "https://instasupersave.com/"
 const { convertMs } = require("../function/number.js")
-const num = require("../function/number.js")
 
 async function otakuDesuSearch(query) {
   const { data } = await axios.get(`${baseOtakudesu}?s=${query}&post_type=anime`)
@@ -121,7 +120,7 @@ async function similarSongs(songs) {
           releaseDate: res.album.release_date
         },
         title: res.name,
-        duration: num.convertMs(res.duration_ms),
+        duration: convertMs(res.duration_ms),
         artists: res.artists.map((art) => art.name).join(", "),
         popularity: res.popularity,
         thumbnail: res.album.image_large,
@@ -138,7 +137,7 @@ async function similarSongs(songs) {
           releaseDate: data.album.release_date
         },
         title: data.name,
-        duration: num.convertMs(data.duration_ms),
+        duration: convertMs(data.duration_ms),
         artists: data.artists.map((art) => art.name).join(", "),
         popularity: data.popularity,
         thumbnail: data.album.image_large,
@@ -150,7 +149,7 @@ async function similarSongs(songs) {
   } catch (err) {
     result = {
       status: false,
-      statusCode: err.response.data.status,
+      statusCode: err.response.data.data.status,
       code: err.response.data.code,
       message: err.response.data.message
     }
