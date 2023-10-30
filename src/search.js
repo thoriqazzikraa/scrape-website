@@ -4,6 +4,7 @@ const baseFilmApik = "https://filmapik21.live/"
 const cheerio = require("cheerio")
 const baseSSS = "https://instasupersave.com/"
 const { convertMs } = require("../function/number.js")
+const num = require("../function/number.js")
 
 async function otakuDesuSearch(query) {
   const { data } = await axios.get(`${baseOtakudesu}?s=${query}&post_type=anime`)
@@ -149,7 +150,7 @@ async function similarSongs(songs) {
   } catch (err) {
     result = {
       status: false,
-      statusCode: err.response.data.data.status,
+      statusCode: err.response.data.status,
       code: err.response.data.code,
       message: err.response.data.message
     }
