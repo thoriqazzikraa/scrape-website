@@ -48,7 +48,11 @@ const scrape = require("scrape-websitee")
      waifu,
      shinobu
     },
-    
+  truthOrDare,
+  getCerpen,
+  getCerpenHorror,
+  randomTiktok
+  },  
   ai: {
     textToImage, // (query)
   },

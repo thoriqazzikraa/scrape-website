@@ -3,6 +3,34 @@ const cheerio = require("cheerio")
 const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru"
 const { pickRandom } = require("../function/pickRandom.js")
 
+async function randomTiktok(username) {
+  let result = {}
+  if (!username.startsWith("@")) {
+    var user = "@" + username
+  } else {
+    var user = username
+  }
+  const { data } = await axios.get(`https://tiktok-video-no-watermark2.p.rapidapi.com/user/posts?unique_id=${user}&count=1000`, {
+    headers: {
+      Accept: "application/json",
+      "X-RapidAPI-Key": "533115be6amsh2515f73f171c6f1p160d9djsn833294e42f10",
+      "X-RapidAPI-Host": "tiktok-video-no-watermark2.p.rapidapi.com",
+      "User-Agent": "PostmanRuntime/7.32.2",
+      Referer: "https://tik.storyclone.com/"
+    }
+  })
+  if (data.code != 0) {
+    result.status = false
+    result.message = "Tidak dapat menemukan akun"
+    console.log(result)
+    return result
+  }
+  result.status = true
+  result.data = pickRandom(data.data.videos)
+  console.log(result.status)
+  return result
+}
+
 const listCerpen = async () => {
   const { data } = await axios.get(baseCerpen)
   let result = []
@@ -151,5 +179,6 @@ module.exports = {
   },
   truthOrDare,
   getCerpen,
-  getCerpenHorror
+  getCerpenHorror,
+  randomTiktok
 }
