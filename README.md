@@ -51,7 +51,7 @@ const scrape = require("scrape-websitee")
   truthOrDare,
   getCerpen,
   getCerpenHorror,
-  randomTiktok
+  randomTiktok // (username)
   },  
   ai: {
     textToImage, // (query)
