@@ -13,7 +13,6 @@ const scrape = require("scrape-websitee")
 {
   tools: {
     uploadFile, // (buffer)
-    enhanceImg, // (url)
     cekResi, // (kurir, resi)
     tiktokTts, // (query)
     ttsModel, 

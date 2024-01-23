@@ -115,26 +115,6 @@ async function tiktokTts(text, model) {
   }
 }
 
-async function enhanceImg(url, scale) {
-  const scaleNumber = scale ? scale : 2
-  const { data } = await axios(`https://toolsapi.spyne.ai/api/forward`, {
-    method: "post",
-    data: {
-      image_url: url,
-      scale: scaleNumber,
-      save_params: {
-        extension: ".png",
-        quality: 95
-      }
-    },
-    headers: {
-      "content-type": "application/json",
-      accept: "*/*"
-    }
-  })
-  return data
-}
-
 async function cekResi(kurir, resi) {
   let { data } = await axios(`https://pluginongkoskirim.com/front/resi`, {
     method: "post",
@@ -149,7 +129,6 @@ async function cekResi(kurir, resi) {
 
 module.exports = {
   uploadFile,
-  enhanceImg,
   cekResi,
   tiktokTts,
   ttsModel

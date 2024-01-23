@@ -122,22 +122,30 @@ async function twitterdl(url) {
 }
 
 async function tiktokdl(url) {
+  let result = {}
   try {
-    const { data } = await axios(`https://downloader.bot/api/tiktok/info`, {
+    const { data } = await axios(`https://tikdownloader.io/api/ajaxSearch`, {
       method: "post",
-      data: { url: url },
+      data: { q: url, lang: "id" },
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
+        Accept: "*/*",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Requested-With": "XMLHttpRequest"
       }
     })
-    return data
+    let $ = cheerio.load(data.data)
+    result.status = true
+    result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
+    result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
+    result.server1 = $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
+    result.server2 = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+    result.serverHD = $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
+    result.mp3 = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
+    return result
   } catch (err) {
-    const result = {
-      status: false,
-      message: "Video not found",
-      messageCmd: String(err)
-    }
+    result.status = false
+    result.message = "Video not found!"
+    result.messageCmd = String(err)
     console.log(result)
     return result
   }
