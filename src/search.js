@@ -278,6 +278,45 @@ async function igStalk(username) {
   }
 }
 
+async function igStalk2(username) {
+  try {
+    const { data, status } = await axios.get(`https://snapinst.com/api/ig/userInfoByUsername/${username}`)
+    if (data.result.user.pronouns.length === 0) {
+      var pronoun = ""
+    } else {
+      const splPron = data.result.user.pronouns
+      const addSlash = splPron.join("/")
+      var pronoun = addSlash
+    }
+    const res = data.result.user
+    const result = {
+      status: true,
+      creator: "Thoriq Azzikra",
+      username: res.username,
+      fullName: res.full_name,
+      followers: res.follower_count,
+      following: res.following_count,
+      pronouns: pronoun,
+      verified: res.is_verified,
+      private: res.is_private,
+      totalPosts: res.media_count,
+      bio: res.biography,
+      externalUrl: res.external_url,
+      urlAcc: `https://instagram.com/${username}`,
+      profilePic: res.hd_profile_pic_url_info.url,
+      pkId: res.pk_id
+    }
+    return result
+  } catch (err) {
+    return (result = {
+      status: false,
+      creator: "Thoriq Azzikra",
+      message: "Tidak dapat menemukan akun"
+    })
+    console.log(result)
+  }
+}
+
 async function similarBand(query) {
   try {
     const { data } = await axios.get(`https://www.music-map.com/${query}`)
@@ -303,6 +342,7 @@ module.exports = {
   lyrics,
   similarBand,
   igStalk,
+  igStalk2,
   filmApikS,
   filmApikDl,
   otakuDesuSearch

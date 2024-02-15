@@ -3,7 +3,7 @@ const fetch = require("node-fetch")
 const formData = require("form-data")
 const { isUrl } = require("../function/isUrl.js")
 const cheerio = require("cheerio")
-const { igStalk } = require("./search.js")
+const { igStalk, igStalk2 } = require("./search.js")
 
 async function twitterdl2(url) {
   try {
@@ -352,11 +352,43 @@ async function igStory(username) {
   }
 }
 
+async function igStory2(username) {
+  try {
+    const { pkId } = await igStalk2(username)
+    const { data } = await axios.get(`https://snapinst.com/api/ig/stories/${pkId}`)
+    let result = { status: true, media: [] }
+    data.result.map((check) => {
+      if (check.has_audio === true) {
+        var url = check.video_versions[0].url
+      } else {
+        var res = check.image_versions2.candidates.find((media) => media.height <= 3000)
+        var url = res.url
+      }
+      result.media.push(url)
+    })
+    if (result.media.length === 0) {
+      result.status = false
+      result.media = null
+      result.message = `The account you're looking for doesn't have any stories or maybe the account is private.`
+    }
+    console.log(result)
+    return result
+  } catch (err) {
+    console.log(err)
+    const result = {
+      status: false,
+      message: "Unknown error occurred."
+    }
+    return result
+  }
+}
+
 module.exports = {
   tiktokdl2,
   soundcloud,
   spotify,
   igStory,
+  igStory2,
   twitterdl2,
   igdl2,
   threads,
