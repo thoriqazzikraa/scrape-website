@@ -25,9 +25,14 @@ async function twitterdl2(url) {
       })
     } else {
       $("div.tw-video").each(function () {
+        if ($(this).find(".tw-right > div > p:nth-child(1) > a").text().includes("(")) {
+          var qualityText = $(this).find(".tw-right > div > p:nth-child(1) > a").text().split("(")[1].split("p")[0].trim()
+        } else {
+          var qualityText = $(this).find(".tw-right > div > p:nth-child(1) > a").text().trim()
+        }
         result.type = "video"
         result.media.push({
-          quality: $(this).find(".tw-right > div > p:nth-child(1) > a").text().split("(")[1].split(")")[0],
+          quality: qualityText,
           url: $(this).find(".tw-right > div > p:nth-child(1) > a").attr("href")
         })
       })
@@ -36,7 +41,7 @@ async function twitterdl2(url) {
   } catch (err) {
     const result = {
       status: false,
-      message: "Media not found!" + String(err)
+      message: "Media not found!\n\n" + String(err)
     }
     console.log(result)
     return result
