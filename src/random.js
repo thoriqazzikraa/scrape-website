@@ -112,7 +112,7 @@ async function truthOrDare(language) {
         }
       })
       const randomResult = pickRandom(data.results)
-      return data.results[randomResult]
+      return randomResult
     }
     const dare = await dareFunc(lang)
     const { data } = await axios(`https://psycatgames.com/api/tod-v2/`, {
@@ -131,7 +131,7 @@ async function truthOrDare(language) {
     const result = {
       status: true,
       dare: dare,
-      truth: data.results[randomResult]
+      truth: randomResult
     }
     return result
   } catch (err) {
