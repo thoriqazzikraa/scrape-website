@@ -141,6 +141,7 @@ async function tiktokdl(url) {
     let $ = cheerio.load(data.data)
     if ($("div.video-data > .photo-list").length === 0) {
       result.status = true
+      result.type = "video"
       result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
       result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
       result.video = {}
@@ -151,6 +152,7 @@ async function tiktokdl(url) {
       result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
     } else {
       result.status = true
+      result.type = "image"
       result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
       result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
       result.audio = {}
@@ -262,6 +264,7 @@ async function tiktokdl2(url) {
     let $ = cheerio.load(data.data)
     if ($("div.video-data > .photo-list").length === 0) {
       result.status = true
+      result.type = "video"
       result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
       result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
       result.video = {}
@@ -272,6 +275,7 @@ async function tiktokdl2(url) {
       result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
     } else {
       result.status = true
+      result.type = "image"
       result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
       result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
       result.audio = {}
