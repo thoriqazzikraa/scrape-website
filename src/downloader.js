@@ -129,7 +129,7 @@ async function twitterdl(url) {
 async function tiktokdl(url) {
   let result = {}
   try {
-    const { data } = await axios(`https://tikdownloader.io/api/ajaxSearch`, {
+    const { data } = await axios("https://tikdownloader.io/api/ajaxSearch", {
       method: "post",
       data: { q: url, lang: "id" },
       headers: {
@@ -139,13 +139,27 @@ async function tiktokdl(url) {
       }
     })
     let $ = cheerio.load(data.data)
-    result.status = true
-    result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
-    result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
-    result.server1 = $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
-    result.server2 = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
-    result.serverHD = $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
-    result.mp3 = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
+    if ($("div.video-data > .photo-list").length === 0) {
+      result.status = true
+      result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
+      result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
+      result.video = {}
+      result.video.server1 = $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
+      result.video.server2 = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+      result.video.serverHD = $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
+      result.audio = {}
+      result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
+    } else {
+      result.status = true
+      result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
+      result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
+      result.audio = {}
+      result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+      result.images = []
+      $("div.video-data > .photo-list > ul > li").each(function () {
+        result.images.push($(this).find("div > div:nth-child(2) > a").attr("href"))
+      })
+    }
     return result
   } catch (err) {
     result.status = false
@@ -245,22 +259,28 @@ async function tiktokdl2(url) {
         "User-Agent": "PostmanRuntime/7.32.2"
       }
     })
-    const $ = cheerio.load(data.data)
-    result.status = true
-    result.caption = $("div.video-data > div > .tik-left > div > .content > div > h3").text()
-    ;(result.server1 = {
-      quality: "MEDIUM",
-      url: $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
-    }),
-      (result.server2 = {
-        quality: "MEDIUM",
-        url: $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
-      }),
-      (result.serverHD = {
-        quality: $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").text().split("MP4 ")[1],
-        url: $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
-      }),
-      (result.audio = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href"))
+    let $ = cheerio.load(data.data)
+    if ($("div.video-data > .photo-list").length === 0) {
+      result.status = true
+      result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
+      result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
+      result.video = {}
+      result.video.server1 = $("div.video-data > div > .tik-right > div > p:nth-child(1) > a").attr("href")
+      result.video.server2 = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+      result.video.serverHD = $("div.video-data > div > .tik-right > div > p:nth-child(3) > a").attr("href")
+      result.audio = {}
+      result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(4) > a").attr("href")
+    } else {
+      result.status = true
+      result.caption = $("div.video-data > div > .tik-left > .thumbnail > .content > .clearfix > h3").text()
+      result.thumbnail = $("div.video-data > div > div:nth-child(1) > div > div:nth-child(1) > img").attr("src")
+      result.audio = {}
+      result.audio.url = $("div.video-data > div > .tik-right > div > p:nth-child(2) > a").attr("href")
+      result.images = []
+      $("div.video-data > .photo-list > ul > li").each(function () {
+        result.images.push($(this).find("div > div:nth-child(2) > a").attr("href"))
+      })
+    }
     return result
   } catch (err) {
     result.status = false
