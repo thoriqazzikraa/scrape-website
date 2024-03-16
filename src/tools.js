@@ -2,7 +2,7 @@ const axios = require("axios")
 const fetch = require("node-fetch")
 const fs = require("fs")
 const formData = require("form-data")
-const { fromBuffer } = require("file-type-cjs-fix")
+const { fromBuffer } = require("file-type")
 
 async function uploadFile(buffer) {
   const { ext, mime } = await fromBuffer(buffer)

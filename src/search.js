@@ -192,6 +192,34 @@ async function findSongs(text) {
   }
 }
 
+async function lyrics2(query) {
+  let result = {}
+  try {
+    const suggestSongs = async () => {
+      const { data } = await axios.get(`https://search.azlyrics.com/suggest.php?q=${query}`)
+      return data
+    }
+    const thisSongs = await suggestSongs(query)
+    const datazlr = await fetch(thisSongs.songs[0].url).then((a) => a.text())
+    const htmlText = datazlr
+    const indexOfComment = htmlText.indexOf("Usage of azlyrics.com content by any third-party lyrics provider is prohibited by our licensing agreement. Sorry about that.")
+    const startIndex = htmlText.lastIndexOf("<div", indexOfComment)
+    const endIndex = htmlText.indexOf("</div>", indexOfComment) + 6
+    const lyrics = htmlText
+      .substring(startIndex, endIndex)
+      .replace(/<!--[^>]*-->/g, "")
+      .replace(/<br>/g, "")
+      .replace(/<\/?div[^>]*>/g, "")
+      .replace(/<\/?i[^>]*>/g, "")
+      .trim()
+    result.title = thisSongs.songs[0].autocomplete
+    result.lyrics = lyrics
+    return result
+  } catch (err) {
+    return String(err)
+  }
+}
+
 async function lyrics(query) {
   let result = {}
   try {
@@ -345,6 +373,7 @@ module.exports = {
   similarSongs,
   findSongs,
   lyrics,
+  lyrics2,
   similarBand,
   igStalk,
   igStalk2,
