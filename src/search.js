@@ -241,7 +241,11 @@ async function lyrics(query) {
 
 async function igStalk(username) {
   try {
-    const { data, status } = await axios.get(`${baseSSS}api/ig/userInfoByUsername/${username}`)
+    const { data, status } = await axios.get(`https://igram.world/api/ig/userInfoByUsername/${username}`, {
+      headers: {
+        "User-Agent": "PostmanRuntime/7.37.0"
+      }
+    })
     if (data.result.user.pronouns.length === 0) {
       var pronoun = ""
     } else {
@@ -269,12 +273,13 @@ async function igStalk(username) {
     }
     return result
   } catch (err) {
-    return (result = {
+    result = {
       status: false,
       creator: "Thoriq Azzikra",
       message: "Tidak dapat menemukan akun"
-    })
+    }
     console.log(result)
+    return result
   }
 }
 

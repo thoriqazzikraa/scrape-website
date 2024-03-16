@@ -353,8 +353,11 @@ async function spotify(url) {
 
 async function igStory(username) {
   try {
-    const { pkId } = await igStalk(username)
-    const { data } = await axios.get(`https://instasupersave.com/api/ig/stories/${pkId}`)
+    const { data } = await axios.get(`https://igram.world/api/ig/story?url=https://instagram.com/stories/${username}`, {
+      headers: {
+        "User-Agent": "PostmanRuntime/7.37.0"
+      }
+    })
     let result = { status: true, media: [] }
     data.result.map((check) => {
       if (check.has_audio === true) {
