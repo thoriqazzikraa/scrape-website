@@ -2,8 +2,47 @@ const axios = require("axios")
 const baseOtakudesu = "https://otakudesu.lol/"
 const baseFilmApik = "https://filmapik21.live/"
 const cheerio = require("cheerio")
-const baseSSS = "https://instasupersave.com/"
+const baseIg = "https://igram.world/"
 const { convertMs } = require("../function/number.js")
+
+async function tvList() {
+  try {
+    const { data } = await axios.get("https://www.jadwaltv.net/")
+    let $ = cheerio.load(data)
+    result = []
+    $("nav#jadwaltv > ul > li").each(function () {
+      let tv = $(this).find("a > span").text().replace(" ", "")
+      result.push(tv)
+    })
+    return result.join(", ").split("SedangTayang")[0]
+  } catch (err) {
+    console.log(err)
+    return String(err)
+  }
+}
+
+async function jadwalTv(tv) {
+  let result = { status: null, message: "", result: [] }
+  try {
+    const channel = tv.replace(" ", "").toLowerCase()
+    const { data } = await axios.get("https://jadwaltv.net/channel/" + channel)
+    let $ = cheerio.load(data)
+    $("table.table > tbody > tr.jklIv").each(function () {
+      result.status = true
+      result.message = "ok"
+      result.result.push({
+        jam: $(this).find("td:nth-child(1)").text().replace("WIB", " WIB"),
+        program: $(this).find("td:nth-child(2)").text()
+      })
+    })
+    return result
+  } catch (err) {
+    result.status = false
+    result.message = "List program for that tv not found"
+    console.log(result)
+    return result
+  }
+}
 
 async function otakuDesuSearch(query) {
   const { data } = await axios.get(`${baseOtakudesu}?s=${query}&post_type=anime`)
@@ -269,7 +308,7 @@ async function lyrics(query) {
 
 async function igStalk(username) {
   try {
-    const { data, status } = await axios.get(`https://igram.world/api/ig/userInfoByUsername/${username}`, {
+    const { data, status } = await axios.get(`${baseIg}api/ig/userInfoByUsername/${username}`, {
       headers: {
         "User-Agent": "PostmanRuntime/7.37.0"
       }
@@ -370,6 +409,8 @@ async function similarBand(query) {
 }
 
 module.exports = {
+  tvList,
+  jadwalTv,
   similarSongs,
   findSongs,
   lyrics,

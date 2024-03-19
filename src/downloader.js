@@ -403,7 +403,6 @@ async function igStory2(username) {
       result.media = null
       result.message = `The account you're looking for doesn't have any stories or maybe the account is private.`
     }
-    console.log(result)
     return result
   } catch (err) {
     console.log(err)

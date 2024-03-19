@@ -33,6 +33,8 @@ const scrape = require("scrape-websitee")
     igdl, // (url)
   },
   search: {
+    tvList,
+    jadwalTv, // (query)
     similarSongs, // (query)
     findSongs, // (query)
     lyrics, // (query)
