@@ -46,6 +46,9 @@ const scrape = require("scrape-websitee")
     filmApikDl, // (url)
     otakuDesuSearch, // (query)
   },
+  football: {
+    standings
+  },
   random: {
     anime: {
      neko,

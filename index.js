@@ -6,6 +6,7 @@ module.exports = {
   tools: require("./src/tools.js"),
   downloader: require("./src/downloader.js"),
   search: require("./src/search.js"),
+  football: require("./src/football.js"),
   random: require("./src/random.js"),
   ai: require("./src/ai.js")
 }
