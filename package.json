@@ -1,6 +1,6 @@
 {
   "name": "scrape-websitee",
-  "version": "1.0.73",
+  "version": "1.0.74",
   "description": "Website Scraping",
   "main": "index.js",
   "scripts": {
