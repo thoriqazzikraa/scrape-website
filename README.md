@@ -55,6 +55,8 @@ const scrape = require("scrape-websitee")
      waifu,
      shinobu
     },
+  gore,
+  randomGore,
   hubbleImg,
   truthOrDare,
   getCerpen,

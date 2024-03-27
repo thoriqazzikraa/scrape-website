@@ -1,6 +1,6 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
-
+standings("premier league")
 async function standings(league) {
   let result = []
   let liga = league.toLowerCase()
@@ -52,6 +52,7 @@ async function standings(league) {
           gd: $(this).find("td:nth-child(8)").text()
         })
       })
+      console.log(result)
       return result
     }
     if (jerman) {

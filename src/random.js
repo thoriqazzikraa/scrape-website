@@ -4,6 +4,65 @@ const baseCerpen = "http://cerpenmu.com/100-cerpen-kiriman-terbaru"
 const { pickRandom } = require("../function/pickRandom.js")
 const { isUrl } = require("../function/isUrl.js")
 
+async function gore() {
+  let result = { status: null, message: "", pages: null, result: [] }
+  try {
+    const page = Math.floor(Math.random() * 723)
+    result.pages = page
+    const { data } = await axios.get("https://kaotic.com/?page=" + page)
+    const $ = cheerio.load(data)
+    $(".row > div > div.tab-wrapper").each(function () {
+      $(this)
+        .find(".tab-content > .row > div.col-xs-6")
+        .each(function () {
+          result.status = true
+          result.message = "ok"
+          result.result.push({
+            title: $(this).find(".video > h2").text(),
+            author: $(this).find(".video > .info > span > a").text(),
+            views: $(this).find(".video > .info > .views-count > span").text(),
+            comments: $(this).find(".video > .info > .comm-count > span").text(),
+            url: $(this).find(".video > .video-image > a").attr("href"),
+            thumbnail: $(this).find(".video > .video-image > a > img").attr("src")
+          })
+        })
+    })
+    if (result.result.length === 0) {
+      ;(result.status = false), (result.message = "Unknown error occurred"), (result.pages = null), (result.result = null)
+      return result
+    }
+    return result
+  } catch (err) {
+    result.status = false
+    result.message = String(err)
+    result.pages = null
+    result.result = ncull
+    return result
+  }
+}
+
+async function randomGore() {
+  let result = {}
+  try {
+    const getGore = await gore()
+    if (getGore.status === false) return getGore.message
+    const randoms = pickRandom(getGore.result)
+    const { data } = await axios.get(randoms.url)
+    const $ = cheerio.load(data)
+    result.status = true
+    result.title = randoms.title
+    result.author = randoms.author
+    result.views = randoms.views
+    result.comments = randoms.comments
+    result.url = $("div.video-container > .video-content > .video-js > source").attr("src")
+    return result
+  } catch (err) {
+    result.status = false
+    result.message = String(err)
+    return result
+  }
+}
+
 async function hubbleImg() {
   let result = {}
   try {
@@ -219,6 +278,8 @@ module.exports = {
     waifu,
     shinobu
   },
+  gore,
+  randomGore,
   hubbleImg,
   truthOrDare,
   getCerpen,
