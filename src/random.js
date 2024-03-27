@@ -36,7 +36,7 @@ async function gore() {
     result.status = false
     result.message = String(err)
     result.pages = null
-    result.result = ncull
+    result.result = null
     return result
   }
 }
