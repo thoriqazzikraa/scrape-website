@@ -59,41 +59,36 @@ async function threads(url) {
 
 async function fbdl(url) {
   try {
-    const { data } = await axios(`https://fdownload.app/api/ajaxSearch`, {
+    let result = {}
+    const { data } = await axios(`https://getmyfb.com/process`, {
       method: "post",
-      data: { p: "home", q: url, lang: "en" },
+      data: { id: url, locale: "en" },
       headers: {
-        accept: "*/*",
-        "content-type": "application/x-www-form-urlencoded",
-        "x-requested-with": "XMLHttpRequest"
+        "HX-Request": true,
+        "HX-Trigger": "form",
+        "HX-Target": "target",
+        "HX-Current-URL": "https://getmyfb.com/en",
+        "Content-Type": "application/x-www-form-urlencoded"
       }
     })
-    const $ = cheerio.load(data.data)
-    let result = []
-    $("#fbdownloader > div.tab-wrap > div:nth-child(5) > table > tbody > tr").each(function () {
-      if ($(this).find("td:nth-child(2)").text() === "Yes") {
-        var link = $(this).find("td:nth-child(3) > button").attr("data-videourl")
-      } else {
-        var link = $(this).find("td:nth-child(3) > a").attr("href")
-      }
-      result.push({
-        quality: $(this).find("td.video-quality").text().split("p")[0],
-        render: $(this).find("td:nth-child(2)").text(),
-        url: link
-      })
-    })
-    if (result.length === 0) {
-      const result = {
-        status: false,
-        message: "Couldn't fetch data of url"
-      }
+    const $ = cheerio.load(data)
+    const thumbnail = $("section > div:nth-child(2) > .results-item > div > img").attr("src")
+    const high = $("section > div:nth-child(2) > .results-download > ul > li:nth-child(1) > a").attr("href")
+    const low = $("section > div:nth-child(2) > .results-download > ul > li:nth-child(2) > a").attr("href")
+    if (!thumbnail && !high && !low) {
+      result.status = false
+      result.message = "Couldn't fetch data of url"
       return result
     }
-    return result.filter((filter) => filter.render === "No")
+    result.status = true
+    result.thumbnail = thumbnail
+    result.high = high
+    result.low = low
+    return result
   } catch (err) {
     const result = {
       status: false,
-      message: `Couldn't fetch data of url\n\n${String(err)}`
+      message: String(err)
     }
     console.log(result)
     return result
