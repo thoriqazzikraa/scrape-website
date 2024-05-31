@@ -5,6 +5,32 @@ const cheerio = require("cheerio")
 const baseIg = "https://igram.world/"
 const { convertMs } = require("../function/number.js")
 
+async function tiktokStalk(user) {
+  try {
+    const { data } = await axios.get(`https://tiktok.com/@${user}`, {
+      headers: {
+        "User-Agent": "PostmanRuntime/7.32.2"
+      }
+    })
+    const $ = cheerio.load(data)
+    const dats = $("#__UNIVERSAL_DATA_FOR_REHYDRATION__").text()
+    const result = JSON.parse(dats)
+    if (result["__DEFAULT_SCOPE__"]["webapp.user-detail"].statusCode !== 0) {
+      const ress = {
+        status: "error",
+        message: "User not found!"
+      }
+      console.log(ress)
+      return ress
+    }
+    const res = result["__DEFAULT_SCOPE__"]["webapp.user-detail"]["userInfo"]
+    return res
+  } catch (err) {
+    console.log(err)
+    return String(err)
+  }
+}
+
 async function tvList() {
   try {
     const { data } = await axios.get("https://www.jadwaltv.net/")
@@ -409,6 +435,7 @@ async function similarBand(query) {
 }
 
 module.exports = {
+  tiktokStalk,
   tvList,
   jadwalTv,
   similarSongs,
