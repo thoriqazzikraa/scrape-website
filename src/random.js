@@ -114,7 +114,7 @@ async function randomTiktok(username) {
   const { data } = await axios.get(`https://tiktok-video-no-watermark2.p.rapidapi.com/user/posts?unique_id=${user}&count=1000`, {
     headers: {
       Accept: "application/json",
-      "X-RapidAPI-Key": "533115be6amsh2515f73f171c6f1p160d9djsn833294e42f10",
+      "X-RapidAPI-Key": "61f99d3e77msh61688cbb09796b4p18b365jsn09c26ce3e5c4",
       "X-RapidAPI-Host": "tiktok-video-no-watermark2.p.rapidapi.com",
       "User-Agent": "PostmanRuntime/7.32.2",
       Referer: "https://tik.storyclone.com/"

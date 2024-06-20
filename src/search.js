@@ -1,8 +1,6 @@
 const axios = require("axios")
-const baseOtakudesu = "https://otakudesu.lol/"
-const baseFilmApik = "https://filmapik21.live/"
+const { baseFilmApik, baseOtakudesu, baseIgram } = require("../config/config.js")
 const cheerio = require("cheerio")
-const baseIg = "https://igram.world/"
 const { convertMs } = require("../function/number.js")
 
 async function tiktokStalk(user) {
@@ -107,7 +105,7 @@ async function filmApikS(query) {
       rating: $(this).find(".details > .meta > span").text().replace("IMDb ", "").replace("TMDb ", ""),
       thumbnail: $(this).find(".image > div > a > img").attr("src"),
       url: $(this).find(".image > div > a").attr("href"),
-      synopsis: $(this).find(".details > .contenido > p").text()
+      synopsis: $(this).find(".details > .contenido > p").text().split("ALUR CERITA : – ")[1]
     })
   })
   if (result.data.length === 0) {
@@ -334,7 +332,7 @@ async function lyrics(query) {
 
 async function igStalk(username) {
   try {
-    const { data, status } = await axios.get(`${baseIg}api/ig/userInfoByUsername/${username}`, {
+    const { data, status } = await axios.get(`${baseIgram}api/ig/userInfoByUsername/${username}`, {
       headers: {
         "User-Agent": "PostmanRuntime/7.37.0"
       }

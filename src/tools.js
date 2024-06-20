@@ -6,7 +6,7 @@ const { fromBuffer } = require("file-type")
 
 async function uploadFile(buffer) {
   const { ext, mime } = await fromBuffer(buffer)
-  const filePath = `temp/${Date.now()}.${ext}`
+  const filePath = __dirname + `/temp/${Date.now()}.${ext}`
   await fs.writeFileSync(filePath, buffer)
   const fileData = fs.readFileSync(filePath)
   try {

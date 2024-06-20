@@ -229,23 +229,23 @@ async function pindl(url) {
   try {
     const { data } = await axios.get(`https://www.savepin.app/download.php?url=${url}&lang=en&type=redirect`)
     const $ = cheerio.load(data)
-    if ($(".download-link > div:nth-child(2) > div > table > tbody >  tr:nth-child(1) > td:nth-child(3) > a").attr("href").includes("force-save.php")) {
-      var urll = decodeURIComponent($(".download-link > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a").attr("href").split("url=")[1])
+    const sources = $(".download-link > div:nth-child(5) > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(3) > a").attr("href")
+    if (sources.includes("force-save.php")) {
+      var urll = decodeURIComponent(sources.split("url=")[1])
     } else {
-      var urll = $(".download-link > div:nth-child(2) > div > table > tbody > tr:nth-child(1) > td:nth-child(3) > a").attr("href")
+      var urll = $(".download-link > div:nth-child(5) > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(3) > a").attr("href")
     }
     const result = {
       status: true,
       url: urll
     }
-    console.log(result)
     return result
   } catch (err) {
     result = {
       status: false,
       msg: "Error: Invalid URL!"
     }
-    console.log(result)
+    console.log(err)
     return result
   }
 }
