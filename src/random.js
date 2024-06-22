@@ -104,6 +104,53 @@ async function hubbleImg() {
   }
 }
 
+async function randomTiktok2(username) {
+  const options = {
+    headers: {
+      origin: "https://tokcounter.com",
+      referer: "https://tokcounter.com/",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+    }
+  }
+  if (username.startsWith("@")) {
+    var user = username.replace("@", "")
+  } else {
+    var user = username
+  }
+  try {
+    const getId = await axios.get(`https://tiktok.livecounts.io/user/data/${user}`, options)
+    const { data } = await axios.get(`https://tiktok.livecounts.io/user/videoList/${getId.data.userId}`, options)
+    const randomId = pickRandom(data.userData)
+    const dataa = await axios.get(`https://tiktok.livecounts.io/video/download/${randomId.id}`, options)
+    const result = {
+      status: true,
+      caption: randomId.title,
+      author: data.author,
+      publishDate: randomId.publishedAt,
+      thumbnail: randomId.dynamicCover,
+      stats: randomId.statistics,
+      audio: {
+        title: dataa.data.sound.title,
+        url: dataa.data.sound.downloadUrl
+      },
+      video: dataa.data.video.downloadUrl
+    }
+    return result
+  } catch (err) {
+    if (!err.response.data.success) {
+      const result = {
+        status: false,
+        message: "Couldn't find the account"
+      }
+      console.log(result)
+      return result
+    } else {
+      console.log(err)
+      return String(err)
+    }
+  }
+}
+
 async function randomTiktok(username) {
   let result = {}
   if (!username.startsWith("@")) {
@@ -284,5 +331,6 @@ module.exports = {
   truthOrDare,
   getCerpen,
   getCerpenHorror,
-  randomTiktok
+  randomTiktok,
+  randomTiktok2
 }
